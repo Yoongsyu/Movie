@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.web.pay.PayDAO">
+
+	<select id="couponList" resultType="Map">
+	SELECT m_no, rs_coupon, rs_admission, rs_cname, rs_discount FROM reservation_coupon WHERE m_no="1"
+	</select>
+	
+	<select id="couponChk" parameterType="String" resultType="Integer">
+	SELECT COUNT(*) FROM reservation_coupon
+	WHERE rs_coupon = #{cCode} AND m_no IS NULL
+	</select>
+	
+	<select id="couDiscount" parameterType="String" resultType="Integer">
+	SELECT rs_discount FROM reservation_coupon
+	WHERE rs_coupon = #{selectCoupon}
+	</select>
+	
+	<update id="couponUpdate" parameterType="Map">
+	UPDATE reservation_coupon SET
+		m_no="1" WHERE rs_coupon = #{cCode}
+	</update>
+	
+	<select id="havePoint" resultType="Map">
+	SELECT m_point FROM members WHERE m_no="1"
+	</select>
+	
+	<select id="ticketPrice" resultType="Map">
+	SELECT tp_price FROM ticket_price WHERE tp_code="123"
+	</select>
+
+		<update id="updatePoint" parameterType="Map">
+		UPDATE members SET
+		m_point=#{mpoint} WHERE m_no="1"
+	</update>
+	
+	<select id="charge" parameterType="String" resultType="Map">
+	SELECT * FROM reservation_card
+	WHERE rs_cname = #{cardSelect}
+	</select>
+	
+</mapper>
