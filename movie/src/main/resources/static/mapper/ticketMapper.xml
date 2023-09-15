@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.web.pay.TicketDAO">
+
+
+	 <select id="ticketInfo" parameterType="Map" resultType="Map">
+   SELECT ms.mv_idx, ms.th_idx, ms.ms_sdate,
+TIME_FORMAT(ms.ms_stime, '%H:%i') as ms_stime,
+		TIME_FORMAT(ms.ms_etime, '%H:%i') as ms_etime,
+		 mi.mv_grade, mi.mv_name, ti.th_city, ti.th_kind
+FROM movie_schedule AS ms
+INNER JOIN movie_info AS mi ON ms.mv_idx = mi.mv_idx
+INNER JOIN theater_info AS ti ON ms.th_idx = ti.th_idx
+WHERE ms.ms_idx =#{ms_idx}
+   </select>
+
+
+<select id="rsNumber" resultType="String">
+   SELECT rs_id FROM reservation_info ORDER BY rs_date DESC LIMIT 1
+   </select>
+   
+   
+      <update id="updateSeat2" parameterType="Map">
+      UPDATE screen_seat SET
+      ss_res="A" WHERE ms_idx=#{msIdx} AND ss_seat=#{seat}
+   </update>
+   
+      <update id="updateRsNum" parameterType="Map">
+      UPDATE reservation_info SET
+      rs_status="0" WHERE rs_id=#{rsNum}
+   </update>
+   
+
+
+</mapper>
