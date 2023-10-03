@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.movie.web.mypage.MyPageDAO">
 
-   <select id="mypage" parameterType="String" resultType="Map">
-SELECT m_name, m_nickname, m_id, m_birth, m_email, m_point
+      <select id="mypage" parameterType="Integer" resultType="Map">
+SELECT m_name, m_nickname, m_id, m_birth, m_email, m_point, m_type
 FROM members
 WHERE m_no = #{mno}
 </select>
 
- <select id="couponList" parameterType="String" resultType="Map">
+ <select id="couponList" parameterType="Integer" resultType="Map">
    SELECT * FROM reservation_coupon WHERE m_no=#{mno}
    </select>
 
@@ -20,6 +20,23 @@ WHERE m_no = #{mno}
 <update id="couponUpdate" parameterType="Map">
    UPDATE reservation_coupon SET
       m_no=#{mno} WHERE rs_coupon = #{cCode}
+   </update>
+
+ <select id="admChk" parameterType="String" resultType="Integer">
+   SELECT COUNT(*) FROM reservation_coupon
+   WHERE rs_admission = #{aCode} AND m_no IS NULL
+   </select>
+
+
+   <update id="admUpdate" parameterType="Map">
+   UPDATE reservation_coupon SET
+      m_no=#{mno} WHERE rs_admission = #{aCode}
+   </update>
+   
+   
+   <update id="updateNickname" parameterType="Map">
+   UPDATE members SET
+      m_nickname=#{nickName} WHERE m_no = #{mno}
    </update>
 
 

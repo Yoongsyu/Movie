@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.web.pay.TicketListDAO">
+
+   <select id="ticketList" parameterType="Integer" resultType="Map">
+ SELECT ri.ri_adult, ri.ri_youth, ri.ri_special, ri.ss_seat, ri.ms_idx, ri.mv_idx, ri.rs_id, ri.rs_status, mi.mv_name, ri.ri_date,
+    TIME_FORMAT(ms.ms_stime, '%H:%i') as ms_stime, TIME_FORMAT(ms.ms_etime, '%H:%i') as ms_etime, ms.th_idx, ti.th_city
+    FROM reservation_info ri
+    INNER JOIN movie_info mi ON ri.mv_idx = mi.mv_idx
+    INNER JOIN movie_schedule ms ON ri.ms_idx = ms.ms_idx
+    INNER JOIN theater_info ti ON ms.th_idx = ti.th_idx
+    WHERE ri.m_no = #{mno}
+    ORDER BY ri.ri_date;
+</select>
+
+
+</mapper>

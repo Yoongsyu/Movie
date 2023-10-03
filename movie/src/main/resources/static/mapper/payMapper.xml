@@ -4,9 +4,7 @@
 
 
 
-
-
-   <select id="couponList" parameterType="String" resultType="Map">
+   <select id="couponList" parameterType="Integer" resultType="Map">
    SELECT m_no, rs_coupon, rs_admission, rs_cindex, rs_aindex, rs_discount FROM reservation_coupon WHERE m_no=#{mno}
    </select>
 
@@ -53,13 +51,13 @@
   </update>
    
    
-   <select id="havePoint" parameterType="String" resultType="Map">
+   <select id="havePoint" parameterType="Integer" resultType="Map">
    SELECT m_point FROM members WHERE m_no=#{mno}
    </select>
 
       <update id="updatePoint" parameterType="Map">
       UPDATE members SET
-      m_point=#{newPoint} WHERE m_no=#{mno}
+      m_point=#{newPoint2} WHERE m_no=#{mno}
    </update>
 
    <select id="charge" parameterType="String" resultType="Map">
@@ -67,12 +65,12 @@
    WHERE rs_cname = #{cardSelect}
    </select>
 
-<select id="cardChk" parameterType="String" resultType="Integer">
+<select id="cardChk" parameterType="Integer" resultType="Integer">
    SELECT COUNT(*) FROM reservation_card
    WHERE m_no = #{mno}
    </select>
    
-      <select id="cardList" parameterType="String" resultType="Map">
+      <select id="cardList" parameterType="Integer" resultType="Map">
    SELECT rs_cname, rs_cnum FROM reservation_card
    WHERE m_no = #{mno}
    </select>
@@ -93,12 +91,12 @@ INNER JOIN theater_info AS ti ON ms.th_idx = ti.th_idx
 WHERE ms.ms_idx =#{ms_idx}
    </select>
    
-   <insert id="rsData" parameterType="Map">
-		INSERT INTO reservation_info (mv_idx, ms_idx, m_no, rs_id, rs_count, rs_status, rs_date)
-		VALUES((SELECT mv_idx FROM movie_info WHERE mv_name=#{mvName}), #{msIdx}, #{mno}, #{randomNum}, #{peopleNum}, "1", NOW())	 
+  <insert id="rsData" parameterType="Map">
+		INSERT INTO reservation_info (mv_idx, ms_idx, m_no, rs_id, rs_count, rs_status, rs_date, ri_adult, ri_youth, ri_special, ss_seat, ri_date)
+		VALUES((SELECT mv_idx FROM movie_info WHERE mv_name=#{mvName}), #{msIdx}, #{mno}, #{rsNum}, #{peopleNum}, "1", NOW(), #{adultNum}, #{youthNum}, #{specialNum}, #{seat}, #{msSdate})	 
 	</insert>
 	
-	   <select id="email" parameterType="String" resultType="Map">
+	   <select id="email" parameterType="Integer" resultType="Map">
    SELECT m_name, m_email FROM members WHERE m_no=#{mno}
    </select>
    
@@ -107,6 +105,12 @@ WHERE ms.ms_idx =#{ms_idx}
       ss_res="A" WHERE ms_idx=#{msIdx} AND ss_seat=#{seat}
    </update>
    
+   <insert id="record" parameterType="Map">
+		INSERT INTO reservation_payment (m_no, rp_payment, rp_pay, rp_savepoint, rp_usepoint, m_point, rs_id)
+		VALUES(#{mno}, #{rpPayment}, #{amount}, #{savePoint}, #{usePoint}, #{newPoint2}, #{rsNum})	 
+	</insert>
+
+	
 
 
 </mapper>

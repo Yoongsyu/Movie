@@ -3,20 +3,24 @@
 <mapper namespace="com.movie.web.pay.TicketDAO">
 
 
-	 <select id="ticketInfo" parameterType="Map" resultType="Map">
-   SELECT ms.mv_idx, ms.th_idx, ms.ms_sdate,
-TIME_FORMAT(ms.ms_stime, '%H:%i') as ms_stime,
-		TIME_FORMAT(ms.ms_etime, '%H:%i') as ms_etime,
-		 mi.mv_grade, mi.mv_name, ti.th_city, ti.th_kind
-FROM movie_schedule AS ms
-INNER JOIN movie_info AS mi ON ms.mv_idx = mi.mv_idx
-INNER JOIN theater_info AS ti ON ms.th_idx = ti.th_idx
-WHERE ms.ms_idx =#{ms_idx}
+	 <select id="ticketInfo" parameterType="String" resultType="Map">
+  SELECT ms.mv_idx, ms.th_idx, ms.ms_sdate,
+    TIME_FORMAT(ms.ms_stime, '%H:%i') as ms_stime,
+    TIME_FORMAT(ms.ms_etime, '%H:%i') as ms_etime,
+    mi.mv_grade, mi.mv_name, ti.th_city, ti.th_kind
+    FROM movie_schedule AS ms
+    INNER JOIN movie_info AS mi ON ms.mv_idx = mi.mv_idx
+    INNER JOIN theater_info AS ti ON ms.th_idx = ti.th_idx
+    WHERE ms.ms_idx = (
+        SELECT ms_idx
+        FROM reservation_info
+        WHERE rs_id = #{rsNum}
+    )
    </select>
 
 
 <select id="rsNumber" resultType="String">
-   SELECT rs_id FROM reservation_info ORDER BY rs_date DESC LIMIT 1
+   SELECT rs_id FROM reservation_info WHERE ms_idx=#{ms_idx} AND ss_seat=#{list} AND rs_status = "1"
    </select>
    
    
@@ -30,6 +34,18 @@ WHERE ms.ms_idx =#{ms_idx}
       rs_status="0" WHERE rs_id=#{rsNum}
    </update>
    
+   <select id="saveUsePoint" parameterType="Map">
+   	SELECT rp_savepoint, rp_usepoint FROM reservation_payment WHERE rs_id=#{rsNum}
+   </select>
+   
+<update id="deductPoint" parameterType="Map">
+	UPDATE members SET
+	 m_point = m_point - #{rp_savepoint} + #{rp_usepoint} WHERE m_no = (SELECT m_no FROM reservation_info WHERE rs_id = #{rsNum})
+	</update>
 
+	<delete id="deletePay" parameterType="String">
+	DELETE FROM reservation_payment
+WHERE rs_id=#{rsNum}
+</delete>
 
 </mapper>
