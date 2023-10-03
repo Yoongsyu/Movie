@@ -12,16 +12,12 @@ public class TicketService {
 	TicketDAO ticketDAO;
 	
 
-	//public Map<String, Object> ticketInfo(int msNum) {
-	//	return ticketDAO.ticketInfo(msNum);
-	//}
-
-	public Map<String, Object> ticketInfo(Map<String, Object> info) {
-		return ticketDAO.ticketInfo(info);
+	public Map<String, Object> ticketInfo(String rsNum) {
+		return ticketDAO.ticketInfo(rsNum);
 	}
 
-	public String rsNumber() {
-		return ticketDAO.rsNumber();
+	public String rsNumber(Map<String, Object> info) {
+		return ticketDAO.rsNumber(info);
 	}
 
 	public void updateSeat2(Map<String, Object> map) {
@@ -44,6 +40,19 @@ public class TicketService {
 
 	public void updateRsNum(Map<String, Object> map) {
 		ticketDAO.updateRsNum(map);
+	}
+
+	public Map<String, Object> saveUsePoint(String rsNum) {
+		return ticketDAO.saveUsePoint(rsNum);
+	}
+
+	public void deductPoint(Map<String, Object> map) {
+		ticketDAO.deductPoint(map);
+		
+	}
+
+	public void deletePay(String rsNum) {
+		ticketDAO.deletePay(rsNum);		
 	}
 	
 	

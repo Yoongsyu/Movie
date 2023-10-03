@@ -11,15 +11,15 @@ public class PayService {
    @Autowired
    private PayDAO payDAO;
 
-   public List<Map<String, Object>> couponList(String mno) {
+   public List<Map<String, Object>> couponList(int mno) {
       return payDAO.couponList(mno);
    }
 
-   public Map<Integer, Object> havePoint(String mno) {
+   public Map<Integer, Object> havePoint(int mno) {
       return payDAO.havePoint(mno);
    }
 
-   public void updatePoint(Map<Integer, Object> map) {
+   public void updatePoint(Map<String, Object> map) {
       payDAO.updatePoint(map);
    }
 
@@ -45,15 +45,15 @@ public class PayService {
 	   }
    
 
-   public Map<String, Object> charge(String cardSelect) {
+   public List<Map<String, Object>> charge(String cardSelect) {
       return payDAO.charge(cardSelect);
    }
 
-    public int cardChk(String mno) {
+    public int cardChk(int mno) {
          return payDAO.cardChk(mno);
       }
 
-      public List<Map<String, Object>> cardList(String mno) {
+      public List<Map<String, Object>> cardList(int mno) {
             return payDAO.cardList(mno);
          }
 
@@ -69,7 +69,7 @@ public class PayService {
       return payDAO.ticketInfo(info);
    }
 
-   public Map<String, Object> email(String mno) {
+   public Map<String, Object> email(int mno) {
 		return payDAO.email(mno);
 	}
 
@@ -101,5 +101,13 @@ public class PayService {
 	
 	public void admDelete(List<String> selectAdm) {
 		payDAO.admDelete(selectAdm);
+	}
+
+	public String rsNumber() {
+		return payDAO.rsNumber();
+	}
+
+	public void record(Map<String, Object> map) {
+		payDAO.record(map);
 	}
 }

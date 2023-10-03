@@ -10,13 +10,11 @@ import org.apache.ibatis.annotations.Param;
 public interface PayDAO {
 
 
-   List<Map<String, Object>> couponList(String mno);
+   List<Map<String, Object>> couponList(int mno);
 
-   Map<Integer, Object> havePoint(String mno);
+   Map<Integer, Object> havePoint(int mno);
 
-   void updatePoint(Map<Integer, Object> map);
-
-   //Map<Integer, Object> ticketPrice();
+   void updatePoint(Map<String, Object> map);
 
    int couponChk(String cCode);
 
@@ -27,11 +25,11 @@ public interface PayDAO {
    void admUpdate(Map<String, Object> map);
 
    
-   Map<String, Object> charge(String cardSelect);
+   List<Map<String, Object>> charge(String cardSelect);
 
-     int cardChk(String mno);
+     int cardChk(int mno);
 
-     List<Map<String, Object>> cardList(String mno);
+     List<Map<String, Object>> cardList(int mno);
 
    void cardUpdate(Map<String, Object> map);
 
@@ -39,7 +37,7 @@ public interface PayDAO {
 
    Map<String, Object> ticketInfo(Map<String, Object> info);
 
-	Map<String, Object> email(String mno);
+	Map<String, Object> email(int mno);
 
 	void rsData(Map<String, Object> rsData);
 
@@ -47,7 +45,11 @@ public interface PayDAO {
 
 	void admDelete(List<String> selectAdm);
 
-	void couDelete(List<String> selectCouponList);   
+	void couDelete(List<String> selectCouponList);
+
+	String rsNumber();
+
+	void record(Map<String, Object> map);   
 
 
      
