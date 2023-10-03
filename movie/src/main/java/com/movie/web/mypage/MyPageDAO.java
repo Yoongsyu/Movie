@@ -8,12 +8,20 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MyPageDAO {
 
-	Map<String, Object> mypage();
+	Map<String, Object> mypage(int mno);
 
-	List<Map<String, Object>> couponList(String mno);
+	List<Map<String, Object>> couponList(int mno);
 
 	int couponChk(String cCode);
 
-	void couponChk(Map<String, Object> map);
+	void couponUpdate(Map<String, Object> map);
+	
+	 int admChk(String cCode);
+
+	   void admUpdate(Map<String, Object> map);
+
+	void updateNickname(Map<String, Object> map);
+
+
 
 }

@@ -1,5 +1,6 @@
 package com.movie.web.mypage;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,27 +22,37 @@ public class MyPageController {
 	
 	@GetMapping("/mypage")
 	public String mypage(Model model, HttpSession session) {
-		 String mno = (String) session.getAttribute("mno");
+		Integer mno = (Integer) session.getAttribute("m_no");
 		
-		Map<String, Object> myInfo = mypageService.mypage();
-		model.addAttribute("myInfo", myInfo);
+		if(mno != null) {
+			
+			Map<String, Object> myInfo = mypageService.mypage(mno);
+			model.addAttribute("myInfo", myInfo);
+			
+			 List<Map<String, Object>> couponList = mypageService.couponList(mno);
+		      model.addAttribute("couponList", couponList);
+			
+		      
+		      
+			return "/mypage";
+			
+			
+		} else {
 		
-		 List<Map<String, Object>> couponList = mypageService.couponList(mno);
-	      model.addAttribute("couponList", couponList);
-		
-		return "/mypage";
+			return "redirect:/login";
+		}
 	}
 	
 	 @ResponseBody
 	   @PostMapping("/couponChk2")
 	   public String couponChk2(@RequestParam("cCode") String cCode, HttpSession session,
-	         @RequestParam Map<String, Object> map) {
+	         Map<String, Object> map) {
 	      int result = mypageService.couponChk(cCode);
 	      JSONObject json = new JSONObject();
 	      json.put("result", result);
 
 	      if (result == 1) {
-	         String mno = (String) session.getAttribute("mno");
+	    	  Integer mno = (Integer) session.getAttribute("m_no");
 	         map.put("mno", mno);
 	         map.put("cCode", cCode);
 	         mypageService.couponUpdate(map);
@@ -51,6 +62,39 @@ public class MyPageController {
 
 	   }
 	
+	 @ResponseBody
+	   @PostMapping("/admChk2")
+	   public String admChk2(@RequestParam("aCode") String aCode, HttpSession session,
+	         Map<String, Object> map) {
+	      int result = mypageService.admChk(aCode);
+	      JSONObject json4 = new JSONObject();
+	      json4.put("result", result);
+
+	      if (result == 1) {
+	    	  Integer mno = (Integer) session.getAttribute("m_no");
+	         map.put("mno", mno);
+	         map.put("aCode", aCode);
+	         mypageService.admUpdate(map);
+	      }
+
+	      return json4.toString();
+
+	   }
+	 
+	 
+	 @ResponseBody
+	 @PostMapping("/updateNickname")
+	 public void updateNickname(@RequestParam("nickName") String nickName, HttpSession session) {
+		 
+		 Integer mno = (Integer) session.getAttribute("m_no");
+
+		 Map<String, Object> map = new HashMap<>();
+         map.put("mno", mno);
+         map.put("nickName", nickName);
+		mypageService.updateNickname(map);
+
+	 }
+	 
 	
 	
 }
